@@ -1,0 +1,137 @@
+#====================================================================================================
+# START - Testing Protocol - DO NOT EDIT OR REMOVE THIS SECTION
+#====================================================================================================
+
+# THIS SECTION CONTAINS CRITICAL TESTING INSTRUCTIONS FOR BOTH AGENTS
+# BOTH MAIN_AGENT AND TESTING_AGENT MUST PRESERVE THIS ENTIRE BLOCK
+
+# Communication Protocol:
+# If the `testing_agent` is available, main agent should delegate all testing tasks to it.
+#
+# You have access to a file called `test_result.md`. This file contains the complete testing state
+# and history, and is the primary means of communication between main and the testing agent.
+#
+# Main and testing agents must follow this exact format to maintain testing data. 
+# The testing data must be entered in yaml format Below is the data structure:
+# 
+## user_problem_statement: {problem_statement}
+## backend:
+##   - task: "Task name"
+##     implemented: true
+##     working: true  # or false or "NA"
+##     file: "file_path.py"
+##     stuck_count: 0
+##     priority: "high"  # or "medium" or "low"
+##     needs_retesting: false
+##     status_history:
+##         -working: true  # or false or "NA"
+##         -agent: "main"  # or "testing" or "user"
+##         -comment: "Detailed comment about status"
+##
+## frontend:
+##   - task: "Task name"
+##     implemented: true
+##     working: true  # or false or "NA"
+##     file: "file_path.js"
+##     stuck_count: 0
+##     priority: "high"  # or "medium" or "low"
+##     needs_retesting: false
+##     status_history:
+##         -working: true  # or false or "NA"
+##         -agent: "main"  # or "testing" or "user"
+##         -comment: "Detailed comment about status"
+##
+## metadata:
+##   created_by: "main_agent"
+##   version: "1.0"
+##   test_sequence: 0
+##   run_ui: false
+##
+## test_plan:
+##   current_focus:
+##     - "Task name 1"
+##     - "Task name 2"
+##   stuck_tasks:
+##     - "Task name with persistent issues"
+##   test_all: false
+##   test_priority: "high_first"  # or "sequential" or "stuck_first"
+##
+## agent_communication:
+##     -agent: "main"  # or "testing" or "user"
+##     -message: "Communication message between agents"
+
+# Protocol Guidelines for Main agent
+#
+# 1. Update Test Result File Before Testing:
+#    - Main agent must always update the `test_result.md` file before calling the testing agent
+#    - Add implementation details to the status_history
+#    - Set `needs_retesting` to true for tasks that need testing
+#    - Update the `test_plan` section to guide testing priorities
+#    - Add a message to `agent_communication` explaining what you've done
+#
+# 2. Incorporate User Feedback:
+#    - When a user provides feedback that something is or isn't working, add this information to the relevant task's status_history
+#    - Update the working status based on user feedback
+#    - If a user reports an issue with a task that was marked as working, increment the stuck_count
+#    - Whenever user reports issue in the app, if we have testing agent and task_result.md file so find the appropriate task for that and append in status_history of that task to contain the user concern and problem as well 
+#
+# 3. Track Stuck Tasks:
+#    - Monitor which tasks have high stuck_count values or where you are fixing same issue again and again, analyze that when you read task_result.md
+#    - For persistent issues, use websearch tool to find solutions
+#    - Pay special attention to tasks in the stuck_tasks list
+#    - When you fix an issue with a stuck task, don't reset the stuck_count until the testing agent confirms it's working
+#
+# 4. Provide Context to Testing Agent:
+#    - When calling the testing agent, provide clear instructions about:
+#      - Which tasks need testing (reference the test_plan)
+#      - Any authentication details or configuration needed
+#      - Specific test scenarios to focus on
+#      - Any known issues or edge cases to verify
+#
+# 5. Call the testing agent with specific instructions referring to test_result.md
+#
+# IMPORTANT: Main agent must ALWAYS update test_result.md BEFORE calling the testing agent, as it relies on this file to understand what to test next.
+
+#====================================================================================================
+# END - Testing Protocol - DO NOT EDIT OR REMOVE THIS SECTION
+#====================================================================================================
+
+
+
+#====================================================================================================
+# Testing Data - Main Agent and testing sub agent both should log testing data below this section
+#====================================================================================================
+
+## Targeted update — main agent handoff for testing
+user_problem_statement: Four features only: global light/dark; real VAPID admin Web Push; authenticated private customer/admin chat with lightweight polling; one subscription-containing order per existing pubg_id, UC orders unlimited. No payment/auth/config/stock/dashboard indicator rewrites, no deployment.
+backend:
+  - task: Partial unique orders.pubg_id index filtered by items.type prime/prime_plus, HTTP 409 duplicates, concurrency-safe
+    implemented: true
+    needs_retesting: true
+  - task: Private chat APIs with existing auth, ownership, 2000-char validation, unread and paginated history
+    implemented: true
+    needs_retesting: true
+  - task: Admin push protected subscriptions/config/test, VAPID background order dispatch, invalid 404/410 cleanup
+    implemented: true
+    needs_retesting: true
+frontend:
+  - task: Global theme, persisted system preference, initial anti-flash script, existing page/dialog/status readability
+    implemented: true
+    needs_retesting: true
+  - task: Chat guest gate, thread client/admin, read/unread, polling paused hidden, history pagination
+    implemented: true
+    needs_retesting: true
+  - task: Push control, explicit permission, SW display/click, deep-linked order
+    implemented: true
+    needs_retesting: true
+agent_communication:
+  - agent: main
+    message: Use current frontend env preview (external API now returns 200, do not reuse old ingress workaround). Read credentials file. Add focused pytest tests only; no live PAPI calls. VAPID generated locally in ignored backend/.env. No mocked runtime API; transport tests may mock provider failures and browser permission to cover headless limits, explicitly report them. Do not print or commit secrets/test credentials. Run final frontend yarn build. Existing initial build passed. Review README for semantics/limitations; subscription index directly covers historical snapshots, all statuses. Need actual push end-to-end verification if browser supports subscription, otherwise be explicit about unverified real device delivery.
+
+
+## Follow-up: required coverage gaps from iteration 3
+- Backend executed suite passed, but deterministic Push delivery/404/410/500 cleanup and new-order dispatch were not covered; add isolated mocked transport tests (clearly labelled).
+- Frontend needs the explicit all-route BOTH-theme matrix, portal dialogs/dropdowns, real system preference initial bootstrap, push granted/default/denied activation lifecycle and SW push/click simulation, chat hidden tab/history pagination, checkout duplicate toast.
+- Probable deep-link bug: ProtectedRoute stores pathname only, dropping ?order. Reproduce logged-out /admin/commandes?order=<id> -> login -> target, then change ONLY state.from to pathname+search+hash and re-test. Auth playbook already obtained; no auth/session/backend changes authorized.
+- New test file loads env credentials/preview URL, generates random QA passwords and records them only in ignored test_credentials.md. Iteration3 report sanitized. Do not re-add passwords to code/reports.
+- Finish final frontend yarn build and include actual output. Avoid repeating all old payment/CRUD tests; finish only coverage gaps above.
