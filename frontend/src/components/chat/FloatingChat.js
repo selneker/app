@@ -51,7 +51,7 @@ export const FloatingChat = () => {
       {count > 0 && !panelOpen && <span data-testid="floating-chat-unread" className="absolute -right-1 -top-1 min-w-[22px] rounded-full bg-rose-500 px-1.5 text-center text-xs font-bold leading-[22px] text-white ring-2 ring-background">{count}</span>}
     </button>
     {panelOpen && <section role="dialog" aria-label="Chat Magic Game Store" data-testid="floating-chat-panel"
-      className="float-glass fixed z-50 flex flex-col overflow-hidden rounded-[1.5rem] border bg-card/95 text-card-foreground inset-x-3 top-[max(0.75rem,env(safe-area-inset-top))] bottom-[max(0.75rem,env(safe-area-inset-bottom))] md:inset-auto md:bottom-6 md:right-6 md:h-[min(640px,calc(100vh-3rem))] md:w-[400px]">
+      className="float-glass fixed z-50 flex flex-col overflow-hidden rounded-[1.5rem] border bg-card/95 text-card-foreground inset-x-3 top-[max(0.75rem,env(safe-area-inset-top))] bottom-[calc(env(safe-area-inset-bottom,0px)+5.5rem)] md:inset-auto md:bottom-6 md:right-6 md:h-[min(640px,calc(100vh-3rem))] md:w-[400px]">
       <header className="flex items-center justify-between gap-3 border-b px-4 py-3">
         <div className="flex items-center gap-2"><span className="flex h-9 w-9 items-center justify-center rounded-full bg-primary/15 text-primary"><MessageCircle className="h-5 w-5" /></span><div><p className="font-display text-base font-bold leading-tight">Magic Game Store</p><p className="text-xs text-muted-foreground">Support · réponse rapide</p></div></div>
         <Button type="button" variant="ghost" size="icon" className="rounded-full" onClick={() => setPanelOpen(false)} aria-label="Fermer le chat" data-testid="floating-chat-close"><X className="h-5 w-5" /></Button>
