@@ -33,11 +33,10 @@ export function ProductCard({ product, index = 0 }) {
 
       <Link to={`/produit/${product.slug}`} className="flex flex-1 flex-col p-4 pt-9 sm:p-5 sm:pt-10">
         <p className="text-[10px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground">{category}</p>
-        <h3 className="mt-4 flex items-baseline gap-1.5 font-display leading-[0.8] text-foreground">
-          <span className="num text-[2.75rem] sm:text-[3.25rem]">{value}</span>
-          <span className="text-base font-black uppercase tracking-tight sm:text-lg">{unit}</span>
+        <h3 className="mt-4 flex min-w-0 items-baseline gap-1.5 font-display leading-[0.8] text-foreground">
+          <span className="num truncate text-[clamp(1.75rem,9vw,3.25rem)] sm:text-[3.25rem]">{value}</span>
+          <span className="shrink-0 text-base font-black uppercase tracking-tight sm:text-lg">{unit}</span>
         </h3>
-        {isUc ? null : null}
 
         <div className="mt-auto pt-6">
           <div className="border-t border-foreground pt-3">
